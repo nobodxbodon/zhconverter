@@ -5,10 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -87,28 +85,11 @@ public class 简繁转换类 {
 
   // TODO: 由于短语有重复部分,争议集里有很大的水分
   private void initializeHelper() {
-    Map<String, Integer> 对应字符个数 = new HashMap<>();
     Iterator iter = 字符表.keySet().iterator();
     while (iter.hasNext()) {
       String 文本 = (String) iter.next();
-      if (文本.length() >= 1) {
-        for (int i = 0; i < 文本.length(); i++) {
-          String 子文本 = 文本.substring(0, i + 1);
-          if (对应字符个数.containsKey(子文本)) {
-            对应字符个数.put(子文本, new Integer(对应字符个数.get(子文本) + 1));
-          } else {
-            对应字符个数.put(子文本, new Integer(1));
-          }
-        }
-      }
-    }
-
-    iter = 对应字符个数.keySet().iterator();
-    while (iter.hasNext()) {
-      String key = (String) iter.next();
-      if ((对应字符个数.get(key)).intValue() > 1) {
-        争议集.add(key);
-      }
+      if (字符表.getProperty(文本).length() > 1)
+        争议集.add(文本);
     }
   }
 

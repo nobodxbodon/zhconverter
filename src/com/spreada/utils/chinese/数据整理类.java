@@ -134,19 +134,16 @@ public class 数据整理类 {
   private static boolean 多余(String 文本) {
     String 单字对应组合 = "";
     String 对应文本 = 字符表.getProperty(文本);
+    if (对应文本.length() != 文本.length()) {
+      return false;
+    }
     for (int 序号 = 0; 序号 < 文本.length(); 序号++) {
       char 字符 = 文本.charAt(序号);
       String 对应字符 = 规整字符表.getProperty(String.valueOf(字符));
-      if (对应字符 == null) {
-        //System.out.println(字符 + " 在: " + 文本);
+      if (对应字符 == null || 对应字符.length() != 1) {
         return false;
       }
-      if (对应字符.length() == 1) {
-        单字对应组合 += 对应字符;
-      } else {
-        //System.out.println("多对应: " + 字符 + "->" + 对应字符);
-        return false;
-      }
+      单字对应组合 += 对应字符;
     }
     return 对应文本.equals(单字对应组合);
   }

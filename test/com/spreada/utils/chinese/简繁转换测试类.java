@@ -22,7 +22,7 @@ public class 简繁转换测试类 {
 
     // issue #4 简体转繁体时，“机械”一起的时候不能转换，但只有一个"机"字可以转换。
     assertEquals("機", 繁体转换器.转换("机"));
-    // assertEquals("機械", 繁体转换器.转换("机械"));
+    assertEquals("機械", 繁体转换器.转换("机械"));
     
     // issue #5
     assertEquals("一鬨而散", 繁体转换器.转换("一哄而散"));
