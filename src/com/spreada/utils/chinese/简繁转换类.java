@@ -85,28 +85,28 @@ public class 简繁转换类 {
     initializeHelper();
   }
 
+  // TODO: 由于短语有重复部分,争议集里有很大的水分
   private void initializeHelper() {
-    Map<String, Integer> stringPossibilities = new HashMap<>();
+    Map<String, Integer> 对应字符个数 = new HashMap<>();
     Iterator iter = 字符表.keySet().iterator();
     while (iter.hasNext()) {
-      String key = (String) iter.next();
-      if (key.length() >= 1) {
-        for (int i = 0; i < (key.length()); i++) {
-          String keySubstring = key.substring(0, i + 1);
-          if (stringPossibilities.containsKey(keySubstring)) {
-            Integer integer = (stringPossibilities.get(keySubstring));
-            stringPossibilities.put(keySubstring, new Integer(integer.intValue() + 1));
+      String 文本 = (String) iter.next();
+      if (文本.length() >= 1) {
+        for (int i = 0; i < 文本.length(); i++) {
+          String 子文本 = 文本.substring(0, i + 1);
+          if (对应字符个数.containsKey(子文本)) {
+            对应字符个数.put(子文本, new Integer(对应字符个数.get(子文本) + 1));
           } else {
-            stringPossibilities.put(keySubstring, new Integer(1));
+            对应字符个数.put(子文本, new Integer(1));
           }
         }
       }
     }
 
-    iter = stringPossibilities.keySet().iterator();
+    iter = 对应字符个数.keySet().iterator();
     while (iter.hasNext()) {
       String key = (String) iter.next();
-      if ((stringPossibilities.get(key)).intValue() > 1) {
+      if ((对应字符个数.get(key)).intValue() > 1) {
         争议集.add(key);
       }
     }
