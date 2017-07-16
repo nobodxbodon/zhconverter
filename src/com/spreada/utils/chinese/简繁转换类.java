@@ -5,18 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 
 public class 简繁转换类 {
 
   private Properties 字符表 = new Properties();
   private Properties 短语表 = new Properties();
   
-  private Set<String> 多对应单字集 = new HashSet<>();
-
   public enum 目标 {
     繁体, 简体;
   }
@@ -66,18 +61,6 @@ public class 简繁转换类 {
         } catch (IOException e) {
         }
       }
-    }
-    // TODO: 只需做一次
-    initializeHelper();
-  }
-
-  // 只对单字检查生成争议集
-  private void initializeHelper() {
-    Iterator iter = 字符表.keySet().iterator();
-    while (iter.hasNext()) {
-      String 文本 = (String) iter.next();
-      if (字符表.getProperty(文本).length() > 1)
-        多对应单字集.add(文本);
     }
   }
 
