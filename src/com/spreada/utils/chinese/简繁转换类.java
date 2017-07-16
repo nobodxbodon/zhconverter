@@ -100,31 +100,18 @@ public class 简繁转换类 {
 
   // 不进行分词: 如果短语没有匹配,则按字寻找对应后组合
   public String 转换(String 输入文本) {
-    StringBuilder 输出文本 = new StringBuilder();
+    StringBuilder 输出文本器 = new StringBuilder();
 
-    int 输入文本长度 = 输入文本.length();
-    if (输入文本长度 > 1 && 短语表.containsKey(输入文本)) {
+    if (输入文本.length() > 1 && 短语表.containsKey(输入文本)) {
       return 短语表.getProperty(输入文本);
     }
     
     for (int i = 0; i < 输入文本.length(); i++) {
       String 单字 = String.valueOf(输入文本.charAt(i));
-      if (字符表.containsKey(单字)) {
-        String 对应字符 = 字符表.getProperty(单字);
-        if (对应字符.length() == 1) {
-          输出文本.append(对应字符);
-        } else {
-          // 暂时用第一个对应字符
-          输出文本.append(对应字符.charAt(0));
-        }
-      } else {
-        输出文本.append(单字);
-      }
+      
+      // 如有多个对应字符, 暂时用第一个; 如果没有对应字符, 保留原字符
+      输出文本器.append(字符表.containsKey(单字) ? 字符表.getProperty(单字).charAt(0) : 单字);
     }
-    return 输出文本.toString();
-  }
-
-  String parseOneChar(String c) {
-    return 字符表.containsKey(c) ? (String) 字符表.get(c) : c;
+    return 输出文本器.toString();
   }
 }

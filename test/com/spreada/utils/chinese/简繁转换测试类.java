@@ -32,6 +32,7 @@ public class 简繁转换测试类 {
     
     // issue #5
     assertEquals("一鬨而散", 繁体转换器.转换("一哄而散"));
+    assertEquals("一哄而散", 简体转换器.转换("一鬨而散"));
   }
 
 }
