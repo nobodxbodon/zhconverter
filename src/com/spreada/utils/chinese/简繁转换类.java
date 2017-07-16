@@ -12,8 +12,11 @@ import java.util.Set;
 
 public class 简繁转换类 {
 
-  private Properties 字符表 = new Properties();
-  private Set<String> 争议集 = new HashSet<>();
+  // TODO: 分开: 简到繁; 繁到简
+  private static Properties 字符表 = new Properties();
+  private static Properties 短语表 = new Properties();
+  
+  private Set<String> 多对应单字集 = new HashSet<>();
 
   public enum 目标 {
     繁体(0), 简体(1);
@@ -30,8 +33,8 @@ public class 简繁转换类 {
   private static final String[] propertyFiles = new String[2];
 
   static {
-    propertyFiles[TRADITIONAL] = "简到繁体字.properties";
-    propertyFiles[SIMPLIFIED] = "繁到简体字.properties";
+    propertyFiles[TRADITIONAL] = "简到繁单字.properties";
+    propertyFiles[SIMPLIFIED] = "繁到简单字.properties";
   }
 
   public static 简繁转换类 getInstance(目标 简繁) {
@@ -46,7 +49,9 @@ public class 简繁转换类 {
   private static 简繁转换类 getInstance(int converterType) {
     if (converters[converterType] == null) {
       synchronized (简繁转换类.class) {
-        converters[converterType] = new 简繁转换类(propertyFiles[converterType]);
+        converters[converterType] = new 简繁转换类(字符表, propertyFiles[converterType]);
+
+        converters[converterType] = new 简繁转换类(短语表, converterType == 0 ? "简到繁短语.properties" : "繁到简短语.properties");
       }
     }
     return converters[converterType];
@@ -57,15 +62,14 @@ public class 简繁转换类 {
     return instance.转换(文本);
   }
 
-
-  private 简繁转换类(String propertyFile) {
+  private 简繁转换类(Properties 对应表, String propertyFile) {
     InputStream is = getClass().getResourceAsStream(propertyFile);
 
     if (is != null) {
       BufferedReader reader = null;
       try {
         reader = new BufferedReader(new InputStreamReader(is));
-        字符表.load(reader);
+        对应表.load(reader);
       } catch (FileNotFoundException e) {
       } catch (IOException e) {
         // TODO Auto-generated catch block
@@ -80,55 +84,44 @@ public class 简繁转换类 {
         }
       }
     }
+    // TODO: 只需做一次
     initializeHelper();
   }
 
-  // TODO: 由于短语有重复部分,争议集里有很大的水分
+  // 只对单字检查生成争议集
   private void initializeHelper() {
     Iterator iter = 字符表.keySet().iterator();
     while (iter.hasNext()) {
       String 文本 = (String) iter.next();
       if (字符表.getProperty(文本).length() > 1)
-        争议集.add(文本);
+        多对应单字集.add(文本);
     }
   }
 
-  public String 转换(String in) {
-    StringBuilder outString = new StringBuilder();
-    StringBuilder stackString = new StringBuilder();
+  // 不进行分词: 如果短语没有匹配,则按字寻找对应后组合
+  public String 转换(String 输入文本) {
+    StringBuilder 输出文本 = new StringBuilder();
 
-    for (int i = 0; i < in.length(); i++) {
-      char c = in.charAt(i);
-      String key = "" + c;
-      stackString.append(key);
-
-      if (争议集.contains(stackString.toString())) {
-        // TODO: 不处理?
-      } else if (字符表.containsKey(stackString.toString())) {
-        outString.append(字符表.get(stackString.toString()));
-        stackString.setLength(0);
+    int 输入文本长度 = 输入文本.length();
+    if (输入文本长度 > 1 && 短语表.containsKey(输入文本)) {
+      return 短语表.getProperty(输入文本);
+    }
+    
+    for (int i = 0; i < 输入文本.length(); i++) {
+      String 单字 = String.valueOf(输入文本.charAt(i));
+      if (字符表.containsKey(单字)) {
+        String 对应字符 = 字符表.getProperty(单字);
+        if (对应字符.length() == 1) {
+          输出文本.append(对应字符);
+        } else {
+          // 暂时用第一个对应字符
+          输出文本.append(对应字符.charAt(0));
+        }
       } else {
-        CharSequence sequence = stackString.subSequence(0, stackString.length() - 1);
-        stackString.delete(0, stackString.length() - 1);
-        flushStack(outString, new StringBuilder(sequence));
+        输出文本.append(单字);
       }
     }
-
-    flushStack(outString, stackString);
-
-    return outString.toString();
-  }
-
-  private void flushStack(StringBuilder outString, StringBuilder stackString) {
-    while (stackString.length() > 0) {
-      if (字符表.containsKey(stackString.toString())) {
-        outString.append(字符表.get(stackString.toString()));
-        stackString.setLength(0);
-      } else {
-        outString.append("" + stackString.charAt(0));
-        stackString.delete(0, 1);
-      }
-    }
+    return 输出文本.toString();
   }
 
   String parseOneChar(String c) {

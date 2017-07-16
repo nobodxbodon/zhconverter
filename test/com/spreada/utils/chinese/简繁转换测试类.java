@@ -15,6 +15,12 @@ public class 简繁转换测试类 {
   public void 基本测试() {
     assertEquals("簡單", 繁体转换器.转换("简单"));
     assertEquals("简单", 简体转换器.转换("簡單"));
+
+    assertEquals("曹操", 繁体转换器.转换("曹操"));
+    assertEquals("趙雲", 繁体转换器.转换("赵云"));
+    assertEquals("赵云", 简体转换器.转换("趙雲"));
+    assertEquals("岳飛", 繁体转换器.转换("岳飞"));
+    assertEquals("岳飞", 简体转换器.转换("岳飛"));
     
     // TODO: issue #1. 不知此字繁体是什么?
     assertEquals("暰", 简体转换器.转换("暰"));
