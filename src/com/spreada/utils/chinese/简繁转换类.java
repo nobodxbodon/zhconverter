@@ -13,8 +13,8 @@ import java.util.Set;
 public class 简繁转换类 {
 
   // TODO: 分开: 简到繁; 繁到简
-  private static Properties 字符表 = new Properties();
-  private static Properties 短语表 = new Properties();
+  private Properties 字符表 = new Properties();
+  private Properties 短语表 = new Properties();
   
   private Set<String> 多对应单字集 = new HashSet<>();
 
@@ -26,16 +26,8 @@ public class 简繁转换类 {
       内部值 = 值;
     }
   }
-  private static final int TRADITIONAL = 0;
-  private static final int SIMPLIFIED = 1;
   private static final int NUM_OF_CONVERTERS = 2;
   private static final 简繁转换类[] converters = new 简繁转换类[NUM_OF_CONVERTERS];
-  private static final String[] propertyFiles = new String[2];
-
-  static {
-    propertyFiles[TRADITIONAL] = "简到繁单字.properties";
-    propertyFiles[SIMPLIFIED] = "繁到简单字.properties";
-  }
 
   public static 简繁转换类 getInstance(目标 简繁) {
     return getInstance(简繁.内部值);
@@ -49,20 +41,30 @@ public class 简繁转换类 {
   private static 简繁转换类 getInstance(int converterType) {
     if (converters[converterType] == null) {
       synchronized (简繁转换类.class) {
-        converters[converterType] = new 简繁转换类(字符表, propertyFiles[converterType]);
-
-        converters[converterType] = new 简繁转换类(短语表, converterType == 0 ? "简到繁短语.properties" : "繁到简短语.properties");
+        converters[converterType] = new 简繁转换类();
+        if (converterType == 0) {
+          converters[converterType].读取字表("简到繁单字.properties", "简到繁短语.properties");
+        } else {
+          converters[converterType].读取字表("繁到简单字.properties", "繁到简短语.properties");
+        }
       }
     }
     return converters[converterType];
   }
 
+  private 简繁转换类() { }
+  
   public static String 转换(String 文本, 目标 简繁) {
     简繁转换类 instance = getInstance(简繁);
     return instance.转换(文本);
   }
 
-  private 简繁转换类(Properties 对应表, String propertyFile) {
+  private void 读取字表(String 单字字表文件名, String 短语字表文件名) {
+    读取字表(字符表, 单字字表文件名);
+    读取字表(短语表, 短语字表文件名);
+  }
+  
+  private void 读取字表(Properties 对应表, String propertyFile) {
     InputStream is = getClass().getResourceAsStream(propertyFile);
 
     if (is != null) {
