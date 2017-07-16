@@ -13,16 +13,16 @@ import java.util.Properties;
 import java.util.Set;
 
 
-public class ZHConverter {
+public class 简繁转换类 {
 
 
-	private Properties charMap = new Properties();
+	private Properties 字符表= new Properties();
 	private Set conflictingSets  = new HashSet();
 
 	public static final int TRADITIONAL = 0;
 	public static final int SIMPLIFIED = 1;
 	private static final int NUM_OF_CONVERTERS = 2;
-	private static final ZHConverter[] converters = new ZHConverter[NUM_OF_CONVERTERS];
+	private static final 简繁转换类[] converters = new 简繁转换类[NUM_OF_CONVERTERS];
 	private static final String[]  propertyFiles = new String[2];
 
 	static {
@@ -37,14 +37,14 @@ public class ZHConverter {
 	 * @param converterType 0 for traditional and 1 for simplified
 	 * @return
 	 */
-	public static ZHConverter getInstance(int converterType) {
+	public static 简繁转换类 getInstance(int converterType) {
 
 		if (converterType >= 0 && converterType < NUM_OF_CONVERTERS) {
 
 			if (converters[converterType] == null) {
-				synchronized(ZHConverter.class) {
+				synchronized(简繁转换类.class) {
 					if (converters[converterType] == null) {
-						converters[converterType] = new ZHConverter(propertyFiles[converterType]);
+						converters[converterType] = new 简繁转换类(propertyFiles[converterType]);
 					}
 				}
 			}
@@ -56,12 +56,12 @@ public class ZHConverter {
 	}
 
 	public static String convert(String text, int converterType) {
-		ZHConverter instance = getInstance(converterType);
+		简繁转换类 instance = getInstance(converterType);
 		return instance.convert(text);
 	}
 
 
-	private ZHConverter(String propertyFile) {
+	private 简繁转换类(String propertyFile) {
 
 	    InputStream is = null;
 
@@ -73,7 +73,7 @@ public class ZHConverter {
 			BufferedReader reader = null;
 			try {
 				reader = new BufferedReader(new InputStreamReader(is));
-				charMap.load(reader);
+				字符表.load(reader);
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -93,7 +93,7 @@ public class ZHConverter {
 
 	private void initializeHelper() {
 		Map stringPossibilities = new HashMap();
-		Iterator iter = charMap.keySet().iterator();
+		Iterator iter = 字符表.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
 			if (key.length() >= 1) {
@@ -133,8 +133,8 @@ public class ZHConverter {
 			stackString.append(key);
 
 			if (conflictingSets.contains(stackString.toString())) {
-			} else if (charMap.containsKey(stackString.toString())) {
-				outString.append(charMap.get(stackString.toString()));
+			} else if (字符表.containsKey(stackString.toString())) {
+				outString.append(字符表.get(stackString.toString()));
 				stackString.setLength(0);
 			} else {
 				CharSequence sequence = stackString.subSequence(0, stackString.length()-1);
@@ -151,8 +151,8 @@ public class ZHConverter {
 
 	private void flushStack(StringBuilder outString, StringBuilder stackString) {
 		while (stackString.length() > 0){
-			if (charMap.containsKey(stackString.toString())) {
-					outString.append(charMap.get(stackString.toString()));
+			if (字符表.containsKey(stackString.toString())) {
+					outString.append(字符表.get(stackString.toString()));
 					stackString.setLength(0);
 
 				} else {
@@ -166,8 +166,8 @@ public class ZHConverter {
 
 	String parseOneChar(String c) {
 
-		if (charMap.containsKey(c)) {
-			return (String) charMap.get(c);
+		if (字符表.containsKey(c)) {
+			return (String) 字符表.get(c);
 
 		}
 		return c;
