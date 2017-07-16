@@ -25,7 +25,7 @@ public class 简繁转换测试类 {
     // assertEquals("機械", 繁体转换器.转换("机械"));
     
     // issue #5
-    // assertEquals("一鬨而散", 繁体转换器.转换("一哄而散"));
+    assertEquals("一鬨而散", 繁体转换器.转换("一哄而散"));
   }
 
 }
