@@ -22,7 +22,7 @@
 		    <fileset dir="${source.dir}" excludes="**/*.java"/>
 		</copy>
 
-		<javac srcdir="${source.dir}" destdir="${classes.dir}" fork="yes" debug="true" source="1.3" target="1.3"/>
+		<javac srcdir="${source.dir}" destdir="${classes.dir}" fork="yes" debug="true" source="1.8" target="1.8"/>
 
 		<delete dir="${dist.dir}"/>
 		<mkdir dir="${dist.dir}"/>

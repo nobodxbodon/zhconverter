@@ -12,15 +12,21 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-
 public class 简繁转换类 {
 
-
   private Properties 字符表 = new Properties();
-  private Set conflictingSets = new HashSet();
+  private Set<String> 争议集 = new HashSet<>();
 
-  public static final int TRADITIONAL = 0;
-  public static final int SIMPLIFIED = 1;
+  public enum 目标 {
+    繁体(0), 简体(1);
+    
+    int 内部值;
+    目标(int 值) {
+      内部值 = 值;
+    }
+  }
+  private static final int TRADITIONAL = 0;
+  private static final int SIMPLIFIED = 1;
   private static final int NUM_OF_CONVERTERS = 2;
   private static final 简繁转换类[] converters = new 简繁转换类[NUM_OF_CONVERTERS];
   private static final String[] propertyFiles = new String[2];
@@ -30,45 +36,33 @@ public class 简繁转换类 {
     propertyFiles[SIMPLIFIED] = "zh2Hans.properties";
   }
 
-
-
+  public static 简繁转换类 getInstance(目标 简繁) {
+    return getInstance(简繁.内部值);
+  }
+  
   /**
    *
    * @param converterType 0 for traditional and 1 for simplified
    * @return
    */
-  public static 简繁转换类 getInstance(int converterType) {
-
-    if (converterType >= 0 && converterType < NUM_OF_CONVERTERS) {
-
-      if (converters[converterType] == null) {
-        synchronized (简繁转换类.class) {
-          if (converters[converterType] == null) {
-            converters[converterType] = new 简繁转换类(propertyFiles[converterType]);
-          }
-        }
+  private static 简繁转换类 getInstance(int converterType) {
+    if (converters[converterType] == null) {
+      synchronized (简繁转换类.class) {
+        converters[converterType] = new 简繁转换类(propertyFiles[converterType]);
       }
-      return converters[converterType];
-
-    } else {
-      return null;
     }
+    return converters[converterType];
   }
 
-  public static String convert(String text, int converterType) {
-    简繁转换类 instance = getInstance(converterType);
-    return instance.convert(text);
+  public static String 转换(String 文本, 目标 简繁) {
+    简繁转换类 instance = getInstance(简繁);
+    return instance.转换(文本);
   }
 
 
   private 简繁转换类(String propertyFile) {
+    InputStream is = getClass().getResourceAsStream(propertyFile);
 
-    InputStream is = null;
-
-
-    is = getClass().getResourceAsStream(propertyFile);
-
-    // File propertyFile = new File("C:/Temp/testMDB/TestTranslator/abc.txt");
     if (is != null) {
       BufferedReader reader = null;
       try {
@@ -92,22 +86,19 @@ public class 简繁转换类 {
   }
 
   private void initializeHelper() {
-    Map stringPossibilities = new HashMap();
+    Map<String, Integer> stringPossibilities = new HashMap<>();
     Iterator iter = 字符表.keySet().iterator();
     while (iter.hasNext()) {
       String key = (String) iter.next();
       if (key.length() >= 1) {
-
         for (int i = 0; i < (key.length()); i++) {
           String keySubstring = key.substring(0, i + 1);
           if (stringPossibilities.containsKey(keySubstring)) {
-            Integer integer = (Integer) (stringPossibilities.get(keySubstring));
+            Integer integer = (stringPossibilities.get(keySubstring));
             stringPossibilities.put(keySubstring, new Integer(integer.intValue() + 1));
-
           } else {
             stringPossibilities.put(keySubstring, new Integer(1));
           }
-
         }
       }
     }
@@ -115,23 +106,23 @@ public class 简繁转换类 {
     iter = stringPossibilities.keySet().iterator();
     while (iter.hasNext()) {
       String key = (String) iter.next();
-      if (((Integer) (stringPossibilities.get(key))).intValue() > 1) {
-        conflictingSets.add(key);
+      if ((stringPossibilities.get(key)).intValue() > 1) {
+        争议集.add(key);
       }
     }
   }
 
-  public String convert(String in) {
+  public String 转换(String in) {
     StringBuilder outString = new StringBuilder();
     StringBuilder stackString = new StringBuilder();
 
     for (int i = 0; i < in.length(); i++) {
-
       char c = in.charAt(i);
       String key = "" + c;
       stackString.append(key);
 
-      if (conflictingSets.contains(stackString.toString())) {
+      if (争议集.contains(stackString.toString())) {
+        // TODO: 不处理?
       } else if (字符表.containsKey(stackString.toString())) {
         outString.append(字符表.get(stackString.toString()));
         stackString.setLength(0);
@@ -147,30 +138,19 @@ public class 简繁转换类 {
     return outString.toString();
   }
 
-
   private void flushStack(StringBuilder outString, StringBuilder stackString) {
     while (stackString.length() > 0) {
       if (字符表.containsKey(stackString.toString())) {
         outString.append(字符表.get(stackString.toString()));
         stackString.setLength(0);
-
       } else {
         outString.append("" + stackString.charAt(0));
         stackString.delete(0, 1);
       }
-
     }
   }
-
 
   String parseOneChar(String c) {
-
-    if (字符表.containsKey(c)) {
-      return (String) 字符表.get(c);
-
-    }
-    return c;
+    return 字符表.containsKey(c) ? (String) 字符表.get(c) : c;
   }
-
-
 }
