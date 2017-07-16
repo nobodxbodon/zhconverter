@@ -32,8 +32,8 @@ public class 简繁转换类 {
   private static final String[] propertyFiles = new String[2];
 
   static {
-    propertyFiles[TRADITIONAL] = "繁体字.properties";
-    propertyFiles[SIMPLIFIED] = "简体字.properties";
+    propertyFiles[TRADITIONAL] = "简到繁体字.properties";
+    propertyFiles[SIMPLIFIED] = "繁到简体字.properties";
   }
 
   public static 简繁转换类 getInstance(目标 简繁) {

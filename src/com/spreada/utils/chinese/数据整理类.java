@@ -18,8 +18,8 @@ public class 数据整理类 {
   private static 数据整理类 整理 = new 数据整理类();
   
   public static void main(String[] 参数) {
-    规整字符表("zh2Hans.properties", "简体字.properties");
-    规整字符表("zh2Hant.properties", "繁体字.properties");
+    规整字符表("zh2Hans.properties", "繁到简体字.properties");
+    规整字符表("zh2Hant.properties", "简到繁体字.properties");
   }
   
   private static void 规整字符表(String 原字符表文件名, String 输出字符表文件名) {
@@ -66,12 +66,7 @@ public class 数据整理类 {
     添加单字 = 0;
     while (iter.hasNext()) {
       String 文本 = (String) iter.next();
-      String 对应文本 = 字符表.getProperty(文本);
-      // 去除所有相同单字对应
-      if (文本.length() == 1 && !文本.equals(对应文本)) {
-        规整字符表.setProperty(文本, 对应文本);
-      }
-      else if (文本.length() > 1) {
+      if (文本.length() > 1) {
         添加单字 += 拆短语(文本);
       }
     }
