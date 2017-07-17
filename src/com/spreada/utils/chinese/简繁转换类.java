@@ -1,23 +1,35 @@
+/* Copyright 2017 Xuan Wu 吴烜
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.spreada.utils.chinese;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class 简繁转换类 {
 
-  private Properties 字符表 = new Properties();
-  private Properties 短语表 = new Properties();
-  
   public enum 目标 {
     繁体, 简体;
   }
   private final static 简繁转换类 简体转换器 = new 简繁转换类();
   private final static 简繁转换类 繁体转换器 = new 简繁转换类();
 
+  private Properties 字符表 = new Properties();
+  private Properties 短语表 = new Properties();
+  
   public static 简繁转换类 getInstance(目标 简繁) {
     if (简繁.equals(目标.繁体)) {
       繁体转换器.读取字表("简到繁单字.properties", "简到繁短语.properties");
@@ -30,41 +42,21 @@ public class 简繁转换类 {
   
   private 简繁转换类() { }
   
+  /**
+   * 不需自行创建转换器即可转换. 内部调用{@link #转换(String) 转换}方法.
+   * @param 文本
+   * @param 简繁 目标格式
+   * @return 转换为目标格式的文本
+   */
   public static String 转换(String 文本, 目标 简繁) {
-    简繁转换类 instance = getInstance(简繁);
-    return instance.转换(文本);
+    return getInstance(简繁).转换(文本);
   }
 
-  private void 读取字表(String 单字字表文件名, String 短语字表文件名) {
-    读取字表(字符表, 单字字表文件名);
-    读取字表(短语表, 短语字表文件名);
-  }
-  
-  private void 读取字表(Properties 对应表, String 属性文件名) {
-    InputStream is = getClass().getResourceAsStream(属性文件名);
-
-    if (is != null) {
-      BufferedReader reader = null;
-      try {
-        reader = new BufferedReader(new InputStreamReader(is));
-        对应表.load(reader);
-      } catch (FileNotFoundException e) {
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } finally {
-        try {
-          if (reader != null)
-            reader.close();
-          if (is != null)
-            is.close();
-        } catch (IOException e) {
-        }
-      }
-    }
-  }
-
-  // 不进行分词: 如果短语没有匹配,则按字寻找对应后组合
+  /**
+   * 不进行分词. 如果长度>1, 寻找匹配的短语. 如没有, 按字寻找对应字后组合.
+   * @param 输入文本
+   * @return 转换后的文本
+   */
   public String 转换(String 输入文本) {
     StringBuilder 输出文本器 = new StringBuilder();
 
@@ -79,5 +71,27 @@ public class 简繁转换类 {
       输出文本器.append(字符表.containsKey(单字) ? 字符表.getProperty(单字).charAt(0) : 单字);
     }
     return 输出文本器.toString();
+  }
+
+  private void 读取字表(String 单字字表文件名, String 短语字表文件名) {
+    读取字表(字符表, 单字字表文件名);
+    读取字表(短语表, 短语字表文件名);
+  }
+  
+  private void 读取字表(Properties 对应表, String 属性文件名) {
+    InputStream 输入流 = null;
+    try {
+      输入流 = getClass().getResourceAsStream(属性文件名);
+      对应表.load(输入流);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (输入流 != null)
+          输入流.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
