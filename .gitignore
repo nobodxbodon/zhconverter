@@ -1,6 +1,6 @@
 /bin/
 /dist/
 /classes/
-src/.DS_Store
+**/.DS_Store
 .classpath
 .project
