@@ -1,4 +1,4 @@
-/* Copyright 2017 Xuan Wu 吴烜
+/* Copyright 2017 吴烜 (Xuan Wu)
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -22,7 +22,7 @@ import java.util.Properties;
 public class 简繁转换类 {
 
   public enum 目标 {
-    繁体, 简体;
+    繁体, 简体
   }
   private final static 简繁转换类 简体转换器 = new 简繁转换类();
   private final static 简繁转换类 繁体转换器 = new 简繁转换类();
@@ -30,7 +30,7 @@ public class 简繁转换类 {
   private Properties 字符表 = new Properties();
   private Properties 短语表 = new Properties();
   
-  public static 简繁转换类 getInstance(目标 简繁) {
+  public static 简繁转换类 取实例(目标 简繁) {
     if (简繁.equals(目标.繁体)) {
       繁体转换器.读取字表("简到繁单字.properties", "简到繁短语.properties");
       return 繁体转换器;
@@ -49,7 +49,7 @@ public class 简繁转换类 {
    * @return 转换为目标格式的文本
    */
   public static String 转换(String 文本, 目标 简繁) {
-    return getInstance(简繁).转换(文本);
+    return 取实例(简繁).转换(文本);
   }
 
   /**

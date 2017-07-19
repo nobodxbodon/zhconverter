@@ -30,8 +30,8 @@ public class 简繁转换测试类 {
   
   @Test
   public void 基本转换测试() {
-    final 简繁转换类 繁体转换器 = 简繁转换类.getInstance(目标.繁体);
-    final 简繁转换类 简体转换器 = 简繁转换类.getInstance(目标.简体);
+    final 简繁转换类 繁体转换器 = 简繁转换类.取实例(目标.繁体);
+    final 简繁转换类 简体转换器 = 简繁转换类.取实例(目标.简体);
     
     assertEquals("簡單", 繁体转换器.转换("简单"));
     assertEquals("简单", 简体转换器.转换("簡單"));

@@ -2,5 +2,4 @@
 /dist/
 /classes/
 **/.DS_Store
-.classpath
-.project
+.*
