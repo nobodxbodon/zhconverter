@@ -1,10 +1,11 @@
-package com.spreada.utils.chinese;
+package com.github.nobodxbodon.zhconverter;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.spreada.utils.chinese.简繁转换类.目标;
+import com.github.nobodxbodon.zhconverter.简繁转换类;
+import com.github.nobodxbodon.zhconverter.简繁转换类.目标;
 
 public class 简繁转换测试类 {
 
