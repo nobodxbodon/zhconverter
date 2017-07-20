@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.nobodxbodon</groupId>
   <artifactId>zhconverter</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>简繁中文字符转换器</name>
   <description>Converter between traditional and simplified characters.</description>
   <url>https://github.com/nobodxbodon/zhconverter</url>
@@ -104,6 +104,16 @@
 	      <autoReleaseAfterClose>true</autoReleaseAfterClose>
 	    </configuration>
 	  </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+        <configuration>
+          <includes>
+            <include>**/*测试类.java</include>
+          </includes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <distributionManagement>
