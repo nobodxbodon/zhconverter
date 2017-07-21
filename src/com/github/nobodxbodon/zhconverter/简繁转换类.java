@@ -19,6 +19,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * 字库基于原项目https://code.google.com/archive/p/java-zhconverter/, 据项目描述来源于MediaWiki.
+ * <p>此项目将字库拆成了单字和短语两部分. 转换规则很简单, 完全不进行分词.
+ * <p>如果短语对应表中找到输入的短语, 就返回对应的短语; 不然就逐字按照单字对应表转换.
+ */
 public class 简繁转换类 {
 
   public enum 目标 {
