@@ -5,3 +5,12 @@
 
 - https://github.com/nobodxbodon/zhconverter/issues/3 
 - https://github.com/nobodxbodon/zhconverter/issues/2
+
+已提交到Maven Central Repository:
+```
+<dependency>
+  <groupId>com.github.nobodxbodon</groupId>
+  <artifactId>zhconverter</artifactId>
+  <version>0.0.3</version>
+</dependency>
+```
