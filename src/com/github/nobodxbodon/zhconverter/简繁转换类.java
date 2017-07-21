@@ -15,14 +15,12 @@
 
 package com.github.nobodxbodon.zhconverter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * 字库基于原项目https://code.google.com/archive/p/java-zhconverter/, 据项目描述来源于MediaWiki.
- * <p>此项目将字库拆成了单字和短语两部分. 转换规则很简单, 完全不进行分词.
- * <p>如果短语对应表中找到输入的短语, 就返回对应的短语; 不然就逐字按照单字对应表转换.
+ * <p>转换规则很简单, 完全不进行分词.
+ * <p>如果输入文本不是单字, 如果在对应表中有完全匹配, 就返回对应的文本; 不然就逐字按照单字转换.
  */
 public class 简繁转换类 {
 
@@ -32,15 +30,14 @@ public class 简繁转换类 {
   private final static 简繁转换类 简体转换器 = new 简繁转换类();
   private final static 简繁转换类 繁体转换器 = new 简繁转换类();
 
-  private Properties 字符表 = new Properties();
-  private Properties 短语表 = new Properties();
+  private ResourceBundle 对应表 = null;
   
   public static 简繁转换类 取实例(目标 简繁) {
     if (简繁.equals(目标.繁体)) {
-      繁体转换器.读取字表("简到繁单字.properties", "简到繁短语.properties");
+      繁体转换器.对应表 = ResourceBundle.getBundle("简到繁单字");
       return 繁体转换器;
     } else {
-      简体转换器.读取字表("繁到简单字.properties", "繁到简短语.properties");
+      简体转换器.对应表 = ResourceBundle.getBundle("繁到简单字");
       return 简体转换器;
     }
   }
@@ -65,38 +62,16 @@ public class 简繁转换类 {
   public String 转换(String 输入文本) {
     StringBuilder 输出文本器 = new StringBuilder();
 
-    if (输入文本.length() > 1 && 短语表.containsKey(输入文本)) {
-      return 短语表.getProperty(输入文本);
+    if (输入文本.length() > 1 && 对应表.containsKey(输入文本)) {
+      return 对应表.getString(输入文本);
     }
     
     for (int i = 0; i < 输入文本.length(); i++) {
       String 单字 = String.valueOf(输入文本.charAt(i));
       
       // 如有多个对应字符, 暂时用第一个; 如果没有对应字符, 保留原字符
-      输出文本器.append(字符表.containsKey(单字) ? 字符表.getProperty(单字).charAt(0) : 单字);
+      输出文本器.append(对应表.containsKey(单字) ? 对应表.getString(单字).charAt(0) : 单字);
     }
     return 输出文本器.toString();
-  }
-
-  private void 读取字表(String 单字字表文件名, String 短语字表文件名) {
-    读取字表(字符表, 单字字表文件名);
-    读取字表(短语表, 短语字表文件名);
-  }
-  
-  private void 读取字表(Properties 对应表, String 属性文件名) {
-    InputStream 输入流 = null;
-    try {
-      输入流 = getClass().getResourceAsStream(属性文件名);
-      对应表.load(输入流);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        if (输入流 != null)
-          输入流.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
   }
 }
