@@ -1,6 +1,3 @@
-/bin/
-/dist/
-/classes/
 **/.DS_Store
 .*
 /target/
