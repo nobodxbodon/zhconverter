@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.nobodxbodon</groupId>
   <artifactId>zhconverter</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <name>简繁中文字符转换器</name>
   <description>Converter between traditional and simplified characters.</description>
   <url>https://github.com/nobodxbodon/zhconverter</url>
@@ -36,14 +36,6 @@
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
