@@ -44,6 +44,17 @@ public class 简繁转换测试类 {
   @Test
   public void 边界测试() {
     确认简繁体互转("", "");
+    确认简繁体互转("a", "a");
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void 异常测试_繁体() {
+    简繁转换类.转换(null, 目标.繁体);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void 异常测试_简体() {
+    简繁转换类.转换(null, 目标.简体);
   }
   
   private void 确认简繁体互转(String 简体文本, String 繁体文本) {
