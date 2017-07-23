@@ -25,6 +25,15 @@ public class 简繁转换测试类 {
     // issue #5
     确认简繁体互转("一哄而散", "一鬨而散");
     
+    // https://github.com/NLPchina/nlp-lang/issues/23
+    确认简繁体互转("土著");
+    确认简繁体互转("乾坤");
+    
+    // https://github.com/NLPchina/nlp-lang/issues/24
+    确认简繁体互转("尼日利亚", "尼日利亞");
+    确认简繁体互转("巴基斯坦");
+    确认简繁体互转("厄瓜多尔", "厄瓜多爾");
+    
     确认简繁体互转("有背光的机械式键盘", "有背光的機械式鍵盤");
   }
   
@@ -55,6 +64,10 @@ public class 简繁转换测试类 {
   @Test(expected = IllegalArgumentException.class)
   public void 异常测试_简体() {
     简繁转换类.转换(null, 目标.简体);
+  }
+  
+  private void 确认简繁体互转(String 文本) {
+    确认简繁体互转(文本, 文本);
   }
   
   private void 确认简繁体互转(String 简体文本, String 繁体文本) {
