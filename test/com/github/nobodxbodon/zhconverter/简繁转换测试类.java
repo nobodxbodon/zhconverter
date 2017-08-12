@@ -1,6 +1,6 @@
 package com.github.nobodxbodon.zhconverter;
 
-import static org.junit.Assert.assertEquals;
+import static com.github.program_in_chinese.junit4_in_chinese.断言类.相等;
 
 import org.junit.Test;
 
@@ -42,12 +42,12 @@ public class 简繁转换测试类 {
     final 简繁转换类 繁体转换器 = 简繁转换类.取实例(目标.繁体);
     final 简繁转换类 简体转换器 = 简繁转换类.取实例(目标.简体);
     
-    assertEquals("簡單", 繁体转换器.转换("简单"));
-    assertEquals("简单", 简体转换器.转换("簡單"));
+    相等("簡單", 繁体转换器.转换("简单"));
+    相等("简单", 简体转换器.转换("簡單"));
     
     // 如果已是简体, 简体转换后不变; 繁体亦然
-    assertEquals("簡單", 繁体转换器.转换("簡單"));
-    assertEquals("简单", 简体转换器.转换("简单"));
+    相等("簡單", 繁体转换器.转换("簡單"));
+    相等("简单", 简体转换器.转换("简单"));
   }
 
   @Test
@@ -71,7 +71,7 @@ public class 简繁转换测试类 {
   }
   
   private void 确认简繁体互转(String 简体文本, String 繁体文本) {
-    assertEquals(繁体文本, 简繁转换类.转换(简体文本, 目标.繁体));
-    assertEquals(简体文本, 简繁转换类.转换(繁体文本, 目标.简体));
+    相等(繁体文本, 简繁转换类.转换(简体文本, 目标.繁体));
+    相等(简体文本, 简繁转换类.转换(繁体文本, 目标.简体));
   }
 }
