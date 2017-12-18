@@ -1,4 +1,5 @@
-# zhconverter
+# 此代码库已不是最新版本. 请移步[至此](https://github.com/program-in-chinese/zhconverter)
+
 中文字符简繁体互相转换, 基于https://code.google.com/archive/p/java-zhconverter/
 
 修改匹配算法后, 解决了原有用户报告的两个问题:
